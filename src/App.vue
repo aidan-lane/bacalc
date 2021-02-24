@@ -15,38 +15,21 @@
 
       <Home/>
     </v-main>
-    <v-footer>
-      <v-col class="d-flex justify-center">
-        <v-col
-          sm="4"
-        >
-          <i class="fas fa-glass-whiskey fa-2x"></i>
-        </v-col>
-
-        <v-col
-          sm="4"
-        >
-          <i class="fas fa-glass-whiskey fa-2x"></i>
-        </v-col>
-
-        <v-col
-          sm="4"
-        >
-          <i class="fas fa-glass-whiskey fa-2x"></i>
-        </v-col>
-      </v-col>
-    </v-footer>
+    
+    <Footer/>
   </v-app>
 </template>
 
 <script>
 import Home from './views/Home';
+import Footer from '@/components/Footer'
 
 export default {
   name: 'BACalc',
 
   components: {
     Home,
+    Footer
   },
 
   data: () => ({

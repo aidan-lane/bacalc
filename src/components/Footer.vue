@@ -26,7 +26,12 @@
 
 <script>
 export default {
-  
+  name: "Footer",
+
+
+  data: () => ({
+    toggle_exclusive: 1, // default-selected nav button
+  }),
 }
 </script>
 

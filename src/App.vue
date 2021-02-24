@@ -1,60 +1,68 @@
 <template>
   <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
+    <v-main class="background">
+      <v-app-bar
+        dense
+        class="title-bar"
+        color="secondary"
       >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </v-app-bar>
+        <v-toolbar-title class="flex text-center"
+          color="textprimary"
+        >
+          {{ title }}
+        </v-toolbar-title>
+      </v-app-bar>
 
-    <v-main>
-      <HelloWorld/>
+      <Home/>
     </v-main>
+    <v-footer>
+      <v-col class="d-flex justify-center">
+        <v-col
+          sm="4"
+        >
+          <i class="fas fa-glass-whiskey fa-2x"></i>
+        </v-col>
+
+        <v-col
+          sm="4"
+        >
+          <i class="fas fa-glass-whiskey fa-2x"></i>
+        </v-col>
+
+        <v-col
+          sm="4"
+        >
+          <i class="fas fa-glass-whiskey fa-2x"></i>
+        </v-col>
+      </v-col>
+    </v-footer>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
+import Home from './views/Home';
 
 export default {
-  name: 'App',
+  name: 'BACalc',
 
   components: {
-    HelloWorld,
+    Home,
   },
 
   data: () => ({
-    //
+    title: "BACalc",
   }),
 };
 </script>
+
+<style>
+  .background {
+    /* background: -webkit-linear-gradient(360deg, #d64759 10%, #da7352 360%); */
+    background-color: white;
+  } 
+
+  .title-bar {
+    color: #d9d8e2 !important;
+    font-weight: bold;
+  }
+</style>

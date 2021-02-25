@@ -1,28 +1,51 @@
 <template>
-  <v-container fluid>
+  <v-container fluid class="d-flex justify-center">
     <v-row class="text-center">
       <v-col md="12" class="menu">
         <h3 class="bac-title font-weight-bold">Your BAC</h3>
 
         <Counter :bac="currentBAC" />
 
+        <div style="margin-bottom: 5.5em" />
+
         <v-row justify="space-around">
           <v-col md="4">
-            <v-btn x-large block rounded elevation="2" color="primary">
+            <v-btn
+              x-large
+              block
+              rounded
+              elevation="2"
+              color="primary"
+              class="mx-0"
+            >
               <div class="alc-btn-text">+1</div>
               <i class="fas fa-beer fa-2x"></i>
             </v-btn>
           </v-col>
 
           <v-col md="4">
-            <v-btn x-large block rounded elevation="3" color="primary">
+            <v-btn
+              x-large
+              block
+              rounded
+              elevation="3"
+              color="primary"
+              class="mx-0"
+            >
               <div class="alc-btn-text">+1</div>
               <i class="fas fa-wine-glass-alt fa-2x"></i>
             </v-btn>
           </v-col>
 
           <v-col md="4">
-            <v-btn x-large block rounded elevation="3" color="primary">
+            <v-btn
+              x-large
+              block
+              rounded
+              elevation="3"
+              color="primary"
+              class="mx-0"
+            >
               <div class="alc-btn-text">+1</div>
               <i class="fas fa-glass-whiskey fa-2x"></i>
             </v-btn>
@@ -72,7 +95,7 @@ export default {
 
 <style>
 .menu {
-  margin-top: 30%;
+  margin-top: 10em;
 }
 
 .bac-title {

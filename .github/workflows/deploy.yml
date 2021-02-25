@@ -9,21 +9,8 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     env:
-      IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_APPLICATION }}
+      IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_APP_NAME }}
     steps:
-    
-    - name: Checkout
-      uses: actions/checkout@master
-    
-    - name: Login
-      uses: google-github-actions/deploy-cloudrun@main
-      with:
-        GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT }}
-        service_account_email: ${{ secrets.GCP_EMAIL }}
-        service_account_key: ${{ secrets.GCP_CREDENTIALS }}
-            
-    - name: Configure Docker
-      run: gcloud auth configure-docker --quiet
             
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -31,12 +18,12 @@ jobs:
     - name: Build Docker image
       run: docker build . -t $IMAGE_NAME 
 
-    - name: Test Docker image
-      run: docker run $IMAGE_NAME sh -c "go test -v" 
-
     - name: Push Docker image
       run: docker push $IMAGE_NAME
 
-    - name: Deploy Docker image
-      run: gcloud run deploy ${{ secrets.GCP_PROJECT }} --image $IMAGE_NAME --region us-central1 --platform managed
-   
+    - name: Deploy to Cloud Run
+      uses: google-github-actions/deploy-cloudrun@main
+      with:
+        image: $IMAGE_NAME
+        service: ${{ secrets.GCP_SERVICE }}
+        credentials: ${{ secrets.GCP_CREDENTIALS }}

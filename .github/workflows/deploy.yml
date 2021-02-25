@@ -18,7 +18,7 @@ jobs:
     - name: Build Docker image
       run: docker build . -t $IMAGE_NAME 
 
-    - name: Push Docker image
+    - name: Push Docker Image
       run: docker push $IMAGE_NAME
 
     - name: Deploy to Cloud Run

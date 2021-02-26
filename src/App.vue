@@ -4,7 +4,7 @@
     <v-main
       v-touch="{ left: () => swipe('left'), right: () => swipe('right') }"
     >
-      <transition name="slide-right">
+      <transition :name="transitionName">
         <router-view class="slideable-page"></router-view>
       </transition>
     </v-main>
@@ -24,17 +24,39 @@ export default {
     Footer,
   },
 
+  data: () => ({
+    transitionName: null,
+  }),
+
   methods: {
+    // Handle state transitions based on swipe direction
     swipe(dir) {
       if (this.$route.path === "/" && dir === "left") {
-        this.setRoute("/about");
+        this.setRoute("/settings");
       } else if (this.$route.path === "/" && dir === "right") {
         this.setRoute("/graph");
-      } else if (this.$route.path === "/about" && dir === "right") {
+      } else if (this.$route.path === "/settings" && dir === "right") {
         this.setRoute("/");
       } else if (this.$route.path === "/graph" && dir === "left") {
         this.setRoute("/");
       }
+    },
+  },
+
+  watch: {
+    // Handle transition animations based on route state change
+    $route(to, from) {
+      const left = "slide-left";
+      const right = "slide-right";
+
+      this.transitionName =
+        from.path === "/"
+          ? to.path === "/graph"
+            ? left
+            : right
+          : from.path === "/graph"
+          ? right
+          : left;
     },
   },
 };
@@ -59,34 +81,38 @@ html {
 
 .slide-left-enter {
   z-index: 1;
+  transform: translateX(-100%);
 }
 
 .slide-left-enter-active {
   z-index: 1;
+  transition: transform 0.4s ease;
 }
 
 .slide-left-leave-active {
-  transition: transform 0.4s ease;
   z-index: 3;
+  transition: transform 0.4s ease;
 }
 
 .slide-left-leave-to {
-  transform: translateX(100%);
+  transform: translateX(130%);
 }
 
 /* Right */
 
 .slide-right-enter {
   z-index: 1;
+  transform: translateX(100%);
 }
 
 .slide-right-enter-active {
   z-index: 1;
+  transition: transform 0.4s ease;
 }
 
 .slide-right-leave-active {
-  transition: transform 0.4s ease;
   z-index: 3;
+  transition: transform 0.4s ease;
 }
 
 .slide-right-leave-to {

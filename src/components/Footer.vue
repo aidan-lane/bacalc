@@ -6,13 +6,13 @@
       rounded
       mandatory
     >
-      <v-btn @click="setRoute('/')">
+      <v-btn @click="setRoute('/graph')">
         <i class="fas fa-chart-bar fa-2x"></i>
       </v-btn>
       <v-btn @click="setRoute('/')">
         <i class="fas fa-home fa-2x"></i>
       </v-btn>
-      <v-btn @click="setRoute('/about')">
+      <v-btn @click="setRoute('/settings')">
         <i class="fas fa-cog fa-2x"></i>
       </v-btn>
     </v-btn-toggle>

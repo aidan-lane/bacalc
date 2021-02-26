@@ -60,14 +60,8 @@ export default {
   },
 
   data: () => ({
-    currentBAC: 0.01,
+    currentBAC: 0.1,
   }),
-
-  methods: {
-    test(p) {
-      console.log(p);
-    },
-  },
 };
 </script>
 

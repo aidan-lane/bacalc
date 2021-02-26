@@ -12,7 +12,8 @@ export default new Vuetify({
       light: {
         primary: '#ffffff',
         secondary: '#ffffff',
-        bac_color: '#27E8A7',
+        bac_color_below: '#27E8A7',
+        bac_color_above: '#fa4b4b',
         accent: '#8c9eff',
         error: '#b71c1c',
         button_color: '#13152B'

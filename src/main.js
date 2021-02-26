@@ -14,6 +14,17 @@ Vue.config.productionTip = false
 library.add(faBeer, faWineGlassAlt, faGlassWhiskey, faHome, faChartBar, faCog)
 dom.watch()
 
+// Mixins
+Vue.mixin({
+  methods: {
+    setRoute: function (route) {
+      if (this.$route.path === route)
+        return
+      this.$router.push({ path: route });
+    }
+  }
+})
+
 new Vue({
   router,
   store,

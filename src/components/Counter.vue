@@ -11,20 +11,20 @@ export default {
   name: "Counter",
 
   props: {
-    bac: Number
+    bac: Number,
   },
 
   computed: {
     getBAC() {
-      return (this.bac + "%").substring(1)
-    }
-  }
-}
+      return (this.bac + "%").substring(1);
+    },
+  },
+};
 </script>
 
 <style scoped>
-   .bac {
-      color: #13152B;
-      font-size: 6em;
-  }
+.bac {
+  color: var(--v-bac_color-base);
+  font-size: 6em;
+}
 </style>

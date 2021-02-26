@@ -1,79 +1,51 @@
 <template>
-  <v-container fluid class="d-flex justify-center">
-    <v-row class="text-center">
-      <v-col md="12" class="menu">
-        <h3 class="bac-title font-weight-bold">Your BAC</h3>
+  <v-container class="text-center">
+    <v-col cols="12">
+      <div style="margin-top: 5%" />
+      <h3 class="bac-title font-weight-bold">Your BAC</h3>
 
-        <Counter :bac="currentBAC" />
+      <Counter :bac="currentBAC" />
+      <div style="margin-top: 5%" />
 
-        <div style="margin-bottom: 5.5em" />
+      <v-row justify="space-around">
+        <v-col cols="4">
+          <v-btn large block rounded color="button_color">
+            <div class="alc-btn-text">+1</div>
+            <i class="fas fa-beer fa-2x btn-text"></i>
+          </v-btn>
+        </v-col>
 
-        <v-row justify="space-around">
-          <v-col md="4">
-            <v-btn
-              x-large
-              block
-              rounded
-              elevation="2"
-              color="primary"
-              class="mx-0"
-            >
-              <div class="alc-btn-text">+1</div>
-              <i class="fas fa-beer fa-2x"></i>
-            </v-btn>
-          </v-col>
+        <v-col cols="4">
+          <v-btn large block rounded color="button_color">
+            <div class="alc-btn-text">+1</div>
+            <i class="fas fa-wine-glass-alt fa-2x btn-text"></i>
+          </v-btn>
+        </v-col>
 
-          <v-col md="4">
-            <v-btn
-              x-large
-              block
-              rounded
-              elevation="3"
-              color="primary"
-              class="mx-0"
-            >
-              <div class="alc-btn-text">+1</div>
-              <i class="fas fa-wine-glass-alt fa-2x"></i>
-            </v-btn>
-          </v-col>
+        <v-col cols="4">
+          <v-btn large block rounded color="button_color">
+            <div class="alc-btn-text">+1</div>
+            <i class="fas fa-glass-whiskey fa-2x btn-text"></i>
+          </v-btn>
+        </v-col>
+      </v-row>
 
-          <v-col md="4">
-            <v-btn
-              x-large
-              block
-              rounded
-              elevation="3"
-              color="primary"
-              class="mx-0"
-            >
-              <div class="alc-btn-text">+1</div>
-              <i class="fas fa-glass-whiskey fa-2x"></i>
-            </v-btn>
-          </v-col>
-        </v-row>
+      <v-row class="custom-input">
+        <v-col cols="6">
+          <v-text-field rounded solo suffix="oz" background-color="primary" />
+        </v-col>
 
-        <v-row class="custom-input">
-          <v-col md="4">
-            <v-text-field
-              rounded
-              solo
-              suffix="oz"
-              background-color="tertiary"
-            />
-          </v-col>
+        <v-col cols="6">
+          <v-text-field rounded solo suffix="%" background-color="primary" />
+        </v-col>
+      </v-row>
 
-          <v-col md="4">
-            <v-text-field rounded solo suffix="%" background-color="tertiary" />
-          </v-col>
-
-          <v-col md="4">
-            <v-btn x-large rounded block elevation="3" color="primary">
-              +1
-            </v-btn>
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
+      <div class="text-xs-center">
+        <v-btn x-large block rounded color="button_color">
+          <div class="btn-text">+1</div>
+        </v-btn>
+      </div>
+    </v-col>
   </v-container>
 </template>
 
@@ -90,33 +62,29 @@ export default {
   data: () => ({
     currentBAC: 0.01,
   }),
+
+  methods: {
+    test(p) {
+      console.log(p);
+    },
+  },
 };
 </script>
 
 <style>
-.menu {
-  margin-top: 10em;
-}
-
 .bac-title {
   font-size: 1.6em;
   color: #d9d8e2;
-  margin-top: -10%;
-  margin-bottom: -1em;
+  margin-bottom: -0.7em;
 }
 
 .alc-btn-text {
   padding-right: 0.2em;
   font-size: 1.3em;
-  font-weight: bold;
+  color: var(--v-primary-base);
 }
 
-.custom-input {
-  margin-top: 100%;
-}
-
-.test {
-  color: red;
-  padding: 100px 100px 100px 100px;
+.btn-text {
+  color: white;
 }
 </style>

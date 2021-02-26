@@ -1,51 +1,95 @@
 <template>
-  <v-app>
-    <v-main class="background">
-      <v-app-bar
-        dense
-        class="title-bar"
-        color="secondary"
-      >
-        <v-toolbar-title class="flex text-center"
-          color="textprimary"
-        >
-          {{ title }}
-        </v-toolbar-title>
-      </v-app-bar>
-
-      <Home/>
+  <v-app id="app">
+    <Header />
+    <v-main
+      v-touch="{ left: () => swipe('left'), right: () => swipe('right') }"
+    >
+      <transition name="slide-right">
+        <router-view class="slideable-page"></router-view>
+      </transition>
     </v-main>
-    
-    <Footer/>
+    <Footer />
   </v-app>
 </template>
 
 <script>
-import Home from './views/Home';
-import Footer from '@/components/Footer'
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export default {
-  name: 'BACalc',
+  name: "BACalc",
 
   components: {
-    Home,
-    Footer
+    Header,
+    Footer,
   },
 
-  data: () => ({
-    title: "BACalc",
-  }),
+  methods: {
+    swipe(dir) {
+      if (this.$route.path === "/" && dir === "left") {
+        this.setRoute("/about");
+      } else if (this.$route.path === "/" && dir === "right") {
+        this.setRoute("/graph");
+      } else if (this.$route.path === "/about" && dir === "right") {
+        this.setRoute("/");
+      } else if (this.$route.path === "/graph" && dir === "left") {
+        this.setRoute("/");
+      }
+    },
+  },
 };
 </script>
 
 <style>
-  .background {
-    /* background: -webkit-linear-gradient(360deg, #d64759 10%, #da7352 360%); */
-    background-color: white;
-  } 
+html {
+  overflow-y: auto;
+}
 
-  .title-bar {
-    color: #d9d8e2 !important;
-    font-weight: bold;
-  }
+#app {
+  background: var(--v-primary-base);
+}
+
+.slideable-page {
+  position: fixed;
+  overflow: auto;
+  z-index: 2;
+}
+
+/* Left */
+
+.slide-left-enter {
+  z-index: 1;
+}
+
+.slide-left-enter-active {
+  z-index: 1;
+}
+
+.slide-left-leave-active {
+  transition: transform 0.4s ease;
+  z-index: 3;
+}
+
+.slide-left-leave-to {
+  transform: translateX(100%);
+}
+
+/* Right */
+
+.slide-right-enter {
+  z-index: 1;
+}
+
+.slide-right-enter-active {
+  z-index: 1;
+}
+
+.slide-right-leave-active {
+  transition: transform 0.4s ease;
+  z-index: 3;
+}
+
+.slide-right-leave-to {
+  transform: translateX(-100%);
+}
 </style>

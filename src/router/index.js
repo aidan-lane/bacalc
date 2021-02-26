@@ -24,4 +24,15 @@ const router = new VueRouter({
   routes
 })
 
+// State based transitions
+router.afterEach((to, from) => {
+  const left = "fade"
+  const right = "fade"
+
+  to.meta.transitionName = from.path === "/" ? to.path === '/graph'
+    ? left : right : from.path === "/graph" ? right : left
+
+  console.log(to.meta.transitionName, to, from)
+})
+
 export default router

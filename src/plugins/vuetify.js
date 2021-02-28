@@ -13,10 +13,10 @@ export default new Vuetify({
         primary: '#ffffff',
         secondary: '#ffffff',
         bac_color_below: '#27E8A7',
-        bac_color_above: '#fa4b4b',
+        bac_color_above: '#ffffff',
         accent: '#8c9eff',
         error: '#b71c1c',
-        button_color: '#13152B'
+        button_color: '#e6e6e6'
       },
       dark: {
         primary: '#232937',

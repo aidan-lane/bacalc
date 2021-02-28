@@ -32,6 +32,6 @@ export default {
 
 <style scoped>
 .bac {
-  font-size: 6em;
+  font-size: 7em;
 }
 </style>

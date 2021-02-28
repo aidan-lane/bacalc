@@ -1,9 +1,9 @@
 <template>
-  <v-app-bar app class="title-bar" color="secondary">
-    <v-toolbar-title class="flex text-center">
-      {{ title }}
-    </v-toolbar-title>
-  </v-app-bar>
+  <div>
+    <v-app-bar app fixed color="primary">
+      <v-toolbar-title>{{ title }}</v-toolbar-title>
+    </v-app-bar>
+  </div>
 </template>
 
 <script>

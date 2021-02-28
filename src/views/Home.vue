@@ -1,29 +1,36 @@
 <template>
-  <v-container class="text-center">
+  <v-container>
     <v-card raised class="main-card" elevation="3">
       <h3
-        class="bac-title font-weight-bold"
+        class="bac-title font-weight-bold text-center"
         style="padding-top: 15%; color: white"
       >
         Your BAC
       </h3>
-      <Counter :bac="0.08" style="margin-top: -1.7em"> </Counter>
+      <Counter :bac="currentBAC" style="margin-top: -1.7em" class="text-center">
+      </Counter>
+      <Meter
+        style="margin-left: 4%; margin-right: 4%"
+        :bac.sync="currentBAC"
+      ></Meter>
     </v-card>
   </v-container>
 </template>
 
 <script>
 import Counter from "@/components/Counter";
+import Meter from "@/components/Meter";
 
 export default {
   name: "Home",
 
   components: {
     Counter,
+    Meter,
   },
 
   data: () => ({
-    currentBAC: 0.1,
+    currentBAC: 0.01,
   }),
 };
 </script>

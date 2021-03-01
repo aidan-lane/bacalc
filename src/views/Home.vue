@@ -1,16 +1,16 @@
 <template>
   <v-container>
-    <v-card raised class="main-card" elevation="3">
+    <v-card raised class="main-card" elevation="5">
       <h3
         class="bac-title font-weight-bold text-center"
-        style="padding-top: 15%; color: white"
+        style="padding-top: 15%; color: #dbdbdb"
       >
         Your BAC
       </h3>
       <Counter :bac="currentBAC" style="margin-top: -1.7em" class="text-center">
       </Counter>
       <Meter
-        style="margin-left: 4%; margin-right: 4%"
+        style="margin-left: 6%; margin-right: 6%"
         :bac.sync="currentBAC"
       ></Meter>
     </v-card>
@@ -30,7 +30,7 @@ export default {
   },
 
   data: () => ({
-    currentBAC: 0.01,
+    currentBAC: 0.0,
   }),
 };
 </script>

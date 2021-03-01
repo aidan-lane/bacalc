@@ -1,6 +1,7 @@
 <template>
-  <v-container>
-    <v-card class="time-card">
+  <v-container class="text-center">
+    <v-card class="time-card" elevation="5">
+      <h1 style="color: #dbdbdb; padding-top: 10%">Your Timeline</h1>
       <v-sparkline
         class="graph"
         :value="values"
@@ -26,7 +27,7 @@ const gradients = [["#f72047", "#ffd200", "#1feaea"]];
 
 export default {
   data: () => ({
-    width: 4,
+    width: 6,
     radius: 3,
     padding: 16,
     lineCap: "round",
@@ -53,11 +54,11 @@ text {
   margin-right: 0.4em;
   height: 50vh;
   border-radius: 26px !important;
-  background: linear-gradient(0deg, #1d2671 0%, #c33764 100%);
+  background: linear-gradient(0deg, #c33764 0%, #1d2671 100%);
 }
 
 .graph {
-  padding-top: 30%;
+  padding-top: 20%;
   padding-bottom: 2em;
   margin-left: 1em;
   margin-right: 1em;

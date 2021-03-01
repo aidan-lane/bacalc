@@ -1,26 +1,14 @@
 <template>
   <v-container>
-    <v-card class="panel-card" elevation="3">
+    <v-card class="panel-card" elevation="5">
       <v-col cols="12">
         <v-row justify="space-around">
-          <v-col cols="4">
+          <v-col cols="12">
             <v-btn block rounded color="button_color">
               <div class="alc-btn-text">+1</div>
-              <i class="fas fa-beer fa-2x btn-text"></i>
-            </v-btn>
-          </v-col>
-
-          <v-col cols="4">
-            <v-btn block rounded color="button_color">
-              <div class="alc-btn-text">+1</div>
-              <i class="fas fa-wine-glass-alt fa-2x btn-text"></i>
-            </v-btn>
-          </v-col>
-
-          <v-col cols="4">
-            <v-btn block rounded color="button_color">
-              <div class="alc-btn-text">+1</div>
-              <i class="fas fa-glass-whiskey fa-2x btn-text"></i>
+              <i class="fas fa-beer fa-2x btn-text alc-icon"></i>
+              <i class="fas fa-wine-glass-alt fa-2x alc-icon"></i>
+              <i class="fas fa-glass-whiskey fa-2x alc-icon"></i>
             </v-btn>
           </v-col>
         </v-row>
@@ -35,9 +23,9 @@
           </v-col>
         </v-row>
 
-        <div class="text-xs-center">
+        <div class="text-xs-center" style="margin-top: -1.5em">
           <v-btn block rounded color="button_color">
-            <div class="btn-text">+1</div>
+            <div style="font-weight: bold; font-size: 1.5em">+1</div>
           </v-btn>
         </div>
       </v-col>
@@ -47,7 +35,7 @@
 
 <style>
 .panel-card {
-  padding: 3% 3% 3% 3%;
+  padding: 5% 3% 3% 3%;
   margin-top: 53vh;
   margin-left: 0.4em;
   margin-right: 0.4em;
@@ -55,14 +43,16 @@
   border-radius: 26px !important;
 }
 
-.alc-btn-text {
-  padding-right: 0.2em;
-  font-size: 1.2em;
+.alc-icon {
+  margin-left: 0.3em;
+  margin-right: 0.3em;
+  font-size: 1.5em;
   font-weight: bold;
 }
 
-.btn-text {
-  font-size: 1.2em;
+.alc-btn-text {
+  padding-right: 0.2em;
+  font-size: 1.5em;
   font-weight: bold;
 }
 </style>

@@ -4,7 +4,7 @@
       <v-col cols="12">
         <v-row justify="space-around">
           <v-col cols="12">
-            <v-btn block rounded color="button_color">
+            <v-btn block rounded color="button_color" @click="addDrink">
               <div class="alc-btn-text">+1</div>
               <i class="fas fa-beer fa-2x btn-text alc-icon"></i>
               <i class="fas fa-wine-glass-alt fa-2x alc-icon"></i>
@@ -24,7 +24,7 @@
         </v-row>
 
         <div class="text-xs-center" style="margin-top: -1.5em">
-          <v-btn block rounded color="button_color">
+          <v-btn block rounded color="button_color" @click="addDrink">
             <div style="font-weight: bold; font-size: 1.5em">+1</div>
           </v-btn>
         </div>
@@ -32,6 +32,25 @@
     </v-card>
   </v-container>
 </template>
+
+<script>
+import db from "../../api";
+
+export default {
+  name: "ButtonPanel",
+
+  data: () => ({
+    oz: null,
+    pct: null,
+  }),
+
+  methods: {
+    addDrink() {
+      db.addDrink(new Date(), "M", this.oz, this.pct);
+    },
+  },
+};
+</script>
 
 <style>
 .panel-card {

@@ -24,13 +24,13 @@ export default {
       }
     });
   },
-  async addDrink(date, sex, oz = -1, pct = -1) {
+  async addDrink(date, sex, oz = null, pct = null) {
 
     let db = await this.getDB();
 
     await db.add(DRINKS_TABLE, {
       date: date, // now (date object)
-      custom: oz == -1 || pct == -1, // boolean
+      custom: oz == null || pct == null, // boolean
       oz: oz, // int
       pct: pct, // int
       sex: sex, // string

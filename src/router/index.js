@@ -2,7 +2,7 @@ import Vue from "vue"
 import VueRouter from "vue-router"
 import Home from "../views/Home.vue"
 import Settings from "../views/Settings.vue"
-import Graph from "../views/Graph.vue"
+import Timeline from "../views/Timeline.vue"
 
 Vue.use(VueRouter)
 
@@ -18,9 +18,9 @@ const routes = [
     component: Settings
   },
   {
-    path: "/graph",
-    name: "Graph",
-    component: Graph
+    path: "/timeline",
+    name: "Timeline",
+    component: Timeline
   }
 ]
 

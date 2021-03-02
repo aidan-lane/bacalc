@@ -1,31 +1,47 @@
 <template>
   <v-app id="app">
-    <Header />
+    <v-snackbar
+      bottom
+      right
+      :value="updateExists"
+      :timeout="-1"
+      color="primary"
+    >
+      An update is available
+      <v-btn text @click="refreshApp"> Update </v-btn>
+    </v-snackbar>
     <v-main
       v-touch="{ left: () => swipe('left'), right: () => swipe('right') }"
     >
       <transition :name="transitionName">
         <router-view class="slideable-page"></router-view>
       </transition>
+
+      <ButtonPanel> </ButtonPanel>
     </v-main>
-    <Footer />
+
+    <BottomNav :currentPage.sync="page" />
   </v-app>
 </template>
 
 <script>
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import ButtonPanel from "@/components/ButtonPanel";
+import BottomNav from "@/components/BottomNav";
+import update from "@/mixins/update";
 
 export default {
   name: "BACalc",
 
+  mixins: [update],
+
   components: {
-    Header,
-    Footer,
+    ButtonPanel,
+    BottomNav,
   },
 
   data: () => ({
     transitionName: null,
+    page: 1,
   }),
 
   methods: {
@@ -33,12 +49,16 @@ export default {
     swipe(dir) {
       if (this.$route.path === "/" && dir === "left") {
         this.setRoute("/settings");
+        this.page++;
       } else if (this.$route.path === "/" && dir === "right") {
-        this.setRoute("/graph");
+        this.setRoute("/timeline");
+        this.page--;
       } else if (this.$route.path === "/settings" && dir === "right") {
         this.setRoute("/");
-      } else if (this.$route.path === "/graph" && dir === "left") {
+        this.page--;
+      } else if (this.$route.path === "/timeline" && dir === "left") {
         this.setRoute("/");
+        this.page++;
       }
     },
   },
@@ -51,10 +71,10 @@ export default {
 
       this.transitionName =
         from.path === "/"
-          ? to.path === "/graph"
+          ? to.path === "/timeline"
             ? left
             : right
-          : from.path === "/graph"
+          : from.path === "/timeline"
           ? right
           : left;
     },
@@ -63,10 +83,6 @@ export default {
 </script>
 
 <style>
-html {
-  overflow-y: auto;
-}
-
 #app {
   background: var(--v-primary-base);
 }
@@ -86,12 +102,12 @@ html {
 
 .slide-left-enter-active {
   z-index: 1;
-  transition: transform 0.4s ease;
+  transition: transform 0.3s ease;
 }
 
 .slide-left-leave-active {
   z-index: 3;
-  transition: transform 0.4s ease;
+  transition: transform 0.3s ease;
 }
 
 .slide-left-leave-to {
@@ -107,12 +123,12 @@ html {
 
 .slide-right-enter-active {
   z-index: 1;
-  transition: transform 0.4s ease;
+  transition: transform 0.3s ease;
 }
 
 .slide-right-leave-active {
   z-index: 3;
-  transition: transform 0.4s ease;
+  transition: transform 0.3s ease;
 }
 
 .slide-right-leave-to {

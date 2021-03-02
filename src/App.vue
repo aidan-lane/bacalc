@@ -1,5 +1,15 @@
 <template>
   <v-app id="app">
+    <v-snackbar
+      bottom
+      right
+      :value="updateExists"
+      :timeout="-1"
+      color="primary"
+    >
+      An update is available
+      <v-btn text @click="refreshApp"> Update </v-btn>
+    </v-snackbar>
     <v-main
       v-touch="{ left: () => swipe('left'), right: () => swipe('right') }"
     >
@@ -17,9 +27,12 @@
 <script>
 import ButtonPanel from "@/components/ButtonPanel";
 import BottomNav from "@/components/BottomNav";
+import update from "@/mixins/update";
 
 export default {
   name: "BACalc",
+
+  mixins: [update],
 
   components: {
     ButtonPanel,

@@ -15,11 +15,23 @@
 
         <v-row class="custom-input">
           <v-col cols="6">
-            <v-text-field rounded solo suffix="oz" background-color="primary" />
+            <v-text-field
+              rounded
+              solo
+              suffix="oz"
+              background-color="primary"
+              v-model="oz"
+            />
           </v-col>
 
           <v-col cols="6">
-            <v-text-field rounded solo suffix="%" background-color="primary" />
+            <v-text-field
+              rounded
+              solo
+              suffix="%"
+              background-color="primary"
+              v-model="pct"
+            />
           </v-col>
         </v-row>
 
@@ -40,13 +52,55 @@ export default {
   name: "ButtonPanel",
 
   data: () => ({
-    oz: null,
-    pct: null,
+    oz: "",
+    pct: "",
   }),
 
   methods: {
-    addDrink() {
-      db.addDrink(new Date(), "M", this.oz, this.pct);
+    alcInGrams(oz, pct) {
+      return oz && pct ? oz * 28.35 * (pct / 100.0) : 14.0;
+    },
+    // This is the main algorithm for calculating the user's
+    // current BAC.
+    async calculateBAC(timeNow, sex, weight, weightLabel) {
+      // sex ratio
+      const r = sex === "Male" ? 0.55 : 0.68;
+
+      // Calculate weight in grams based on kg or lbs
+      let weightInGrams = weight;
+      weightInGrams =
+        weightLabel === "Lb" ? weightInGrams * 453.29 : weightInGrams * 1000.0;
+
+      // Get drinks from the past 12 hours and sum alcohol content
+      let bacTotal =
+        (this.alcInGrams(this.oz, this.pct) / (weightInGrams * r)) * 100.0;
+      const pastDrinks = await db.getDrinksPastNHours(12);
+
+      for (var i = 0; i < pastDrinks.length; i++) {
+        let drink = pastDrinks[i];
+        // calculate time between current drink and first drink in the past 24 hours
+        const elapsed = (timeNow - new Date().getTime()) / (60 * 60 * 1000);
+        bacTotal +=
+          (this.alcInGrams(drink.oz, drink.pct) / (weightInGrams * r)) * 100.0 -
+          elapsed * 0.015;
+      }
+
+      return bacTotal;
+    },
+    async addDrink() {
+      const sex = this.$store.state.settings.sex;
+      const weight = this.$store.state.settings.weight;
+      const weightLabel = this.$store.state.settings.weightLabel;
+
+      const now = new Date();
+
+      if (!sex || !weight) {
+        console.log("WIP!");
+        return;
+      }
+
+      const bac = await this.calculateBAC(now, sex, weight, weightLabel);
+      await db.addDrink(now, bac, this.oz, this.pct);
     },
   },
 };

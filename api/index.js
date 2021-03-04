@@ -2,7 +2,7 @@ import { openDB } from "idb";
 
 const DB_NAME = "bac_db";
 const DB_VERSION = 1;
-let DB;
+let DB = null;
 
 const DRINKS_TABLE = "drinks";
 
@@ -23,17 +23,18 @@ export default {
         store.createIndex("date", "date");
       }
     });
+
+    return DB;
   },
-  async addDrink(date, sex, oz = null, pct = null) {
+  async addDrink(date, bac, oz = null, pct = null) {
 
     let db = await this.getDB();
 
-    await db.add(DRINKS_TABLE, {
+    db.add(DRINKS_TABLE, {
       date: date, // now (date object)
-      custom: oz == null || pct == null, // boolean
+      bac: bac,
       oz: oz, // int
       pct: pct, // int
-      sex: sex, // string
     });
   },
   async removeLatestDrink() {
@@ -49,4 +50,14 @@ export default {
     let db = await this.getDB();
     return await db.getAllFromIndex(DRINKS_TABLE, "date", null, n);
   },
+  async getDrinksPastNHours(hours) {
+
+    let db = await this.getDB();
+
+    const upper = new Date(); // upper bound is current time
+    const lower = new Date(upper.getTime() - (hours * 60 * 60 * 1000)); // lower bound is past 12 hours
+    const keyRange = IDBKeyRange.bound(lower, upper); // [lower, upper]
+
+    return db.getAllFromIndex(DRINKS_TABLE, "date", keyRange);
+  }
 }

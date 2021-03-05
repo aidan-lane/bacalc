@@ -37,10 +37,12 @@ export default {
     currentBAC: 0.0,
   }),
 
+  mounted() {},
+
   computed: {
     // Gets your total BAC
     getBAC() {
-      return this.$store.state.totalBAC;
+      return this.$store.state.currentBAC;
     },
   },
 };

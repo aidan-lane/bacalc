@@ -12,7 +12,7 @@ export default new Vuex.Store({
     },
     pastBACs: [],
     pastBACLabels: [],
-    totalBAC: 0.0,
+    currentBAC: 0.0,
   },
   mutations: {
     SET_SEX(state, val) {
@@ -35,8 +35,11 @@ export default new Vuex.Store({
       state.pastBACs.push(data.bac);
       state.pastBACLabels.push(data.time);
 
-      // also add to total
-      state.totalBAC += data.bac;
+      // also update total
+      state.currentBAC = data.bac;
+    },
+    SET_BAC(state, bac) {
+      state.currentBAC = bac;
     }
   },
   actions: {

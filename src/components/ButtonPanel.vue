@@ -57,43 +57,18 @@ export default {
   }),
 
   methods: {
+    getWeightInGrams(weight, weightLabel) {
+      return weightLabel === "Lb" ? weight * 453.29 : weight * 1000.0;
+    },
     alcInGrams(oz, pct) {
       return oz && pct ? oz * 28.35 * (pct / 100.0) : 14.0;
-    },
-    // This is the main algorithm for calculating the user's
-    // current BAC.
-    async calculateBAC(timeNow, sex, weight, weightLabel) {
-      // sex ratio
-      const r = sex === "Male" ? 0.55 : 0.68;
-
-      // Calculate weight in grams based on kg or lbs
-      let weightInGrams = weight;
-      weightInGrams =
-        weightLabel === "Lb" ? weightInGrams * 453.29 : weightInGrams * 1000.0;
-
-      // Get drinks from the past 12 hours and sum alcohol content
-      let bacTotal =
-        (this.alcInGrams(this.oz, this.pct) / (weightInGrams * r)) * 100.0;
-      const pastDrinks = await db.getDrinksPastNHours(12);
-
-      for (var i = 0; i < pastDrinks.length; i++) {
-        let drink = pastDrinks[i];
-        // calculate time between current drink and first drink in the past 24 hours
-        const elapsed = (timeNow - new Date().getTime()) / (60 * 60 * 1000);
-        // prevent negative bac values
-        bacTotal += Math.max(
-          (this.alcInGrams(drink.oz, drink.pct) / (weightInGrams * r)) * 100.0 -
-            elapsed * 0.015,
-          0
-        );
-      }
-
-      return bacTotal;
     },
     async addDrink() {
       const sex = this.$store.state.settings.sex;
       const weight = this.$store.state.settings.weight;
       const weightLabel = this.$store.state.settings.weightLabel;
+
+      const r = sex === "Male" ? 0.55 : 0.68;
 
       const now = new Date();
 
@@ -102,9 +77,19 @@ export default {
         return;
       }
 
-      const bac = await this.calculateBAC(now, sex, weight, weightLabel);
-      this.$store.commit("ADD_BAC", { bac: bac, time: now });
-      await db.addDrink(now, bac, this.oz, this.pct);
+      // First, calculate the current BAC based on past drinks in the last 12 hours.
+      // Then indepdently calculate the new BAC, and then add together.
+      const currentBAC = await this.calculateBAC(now, sex, weight, weightLabel);
+      const newBAC =
+        (this.alcInGrams(this.oz, this.pct) /
+          (this.getWeightInGrams(weight, weightLabel) * r)) *
+        100.0;
+      const totalBAC = currentBAC + newBAC;
+
+      // Add the total BAC so we can handle it in other components
+      this.$store.commit("ADD_BAC", { bac: totalBAC, time: now });
+      // Store only the newly added bac in the db
+      await db.addDrink(now, newBAC, this.oz, this.pct);
     },
   },
 };

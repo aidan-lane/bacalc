@@ -80,9 +80,12 @@ export default {
         let drink = pastDrinks[i];
         // calculate time between current drink and first drink in the past 24 hours
         const elapsed = (timeNow - new Date().getTime()) / (60 * 60 * 1000);
-        bacTotal +=
+        // prevent negative bac values
+        bacTotal += Math.max(
           (this.alcInGrams(drink.oz, drink.pct) / (weightInGrams * r)) * 100.0 -
-          elapsed * 0.015;
+            elapsed * 0.015,
+          0
+        );
       }
 
       return bacTotal;
@@ -100,6 +103,7 @@ export default {
       }
 
       const bac = await this.calculateBAC(now, sex, weight, weightLabel);
+      this.$store.commit("ADD_BAC", { bac: bac, time: now });
       await db.addDrink(now, bac, this.oz, this.pct);
     },
   },

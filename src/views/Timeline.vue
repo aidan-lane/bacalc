@@ -24,6 +24,7 @@
 
 <script>
 const gradients = [["#f72047", "#ffd200", "#1feaea"]];
+import db from "../../api";
 
 export default {
   data: () => ({
@@ -32,14 +33,59 @@ export default {
     padding: 16,
     lineCap: "round",
     gradient: gradients[0],
-    values: [0.0, 0.02, 0.08, 0.8],
-    labels: ["12pm", "1pm", "2pm", "3pm", "4pm"],
+    values: [],
+    labels: [],
     gradientDirection: "top",
     gradients,
     fill: false,
     type: "trend",
     autoLineWidth: false,
+    lookBack: 6,
   }),
+
+  methods: {
+    // converts a date string to a rounded, abbreviated hour.
+    // ie.e 2021-03-13 12:30 => 12pm
+    timeToString(time) {
+      const hour = time.getHours();
+      const conv = (hour + 24) % 12 || 12;
+      return hour >= 12 ? conv + "pm" : conv + "am";
+    },
+  },
+
+  mounted() {
+    // load bac data from last n hours
+    db.getDrinksPastNHours(this.lookBack).then((drinks) => {
+      let hours = new Map();
+      let now = new Date();
+      for (let i = 0; i < this.lookBack; i++) {
+        hours.set(this.timeToString(now), 0);
+        now.setHours(now.getHours() - 1); // go back one hour
+      }
+
+      for (let i = 0; i < drinks.length; i++) {
+        const key = this.timeToString(new Date(drinks[i].date));
+        hours.set(key, hours.get(key) + drinks[i].bac);
+      }
+
+      hours.forEach((val, key) => {
+        this.values.unshift(val);
+        this.labels.unshift(key);
+      });
+    });
+  },
+
+  computed: {
+    bacs() {
+      return this.$store.state.pastBACs;
+    },
+  },
+
+  watch: {
+    bacs: function () {
+      console.log("test");
+    },
+  },
 };
 </script>
 

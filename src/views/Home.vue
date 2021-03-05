@@ -7,7 +7,11 @@
       >
         Your BAC
       </h3>
-      <Counter :bac="currentBAC" style="margin-top: -1.7em" class="text-center">
+      <Counter
+        :bac.sync="getBAC"
+        style="margin-top: -1.7em"
+        class="text-center"
+      >
       </Counter>
       <Meter
         style="margin-left: 6%; margin-right: 6%"
@@ -32,6 +36,13 @@ export default {
   data: () => ({
     currentBAC: 0.0,
   }),
+
+  computed: {
+    // Gets your total BAC
+    getBAC() {
+      return this.$store.state.totalBAC;
+    },
+  },
 };
 </script>
 

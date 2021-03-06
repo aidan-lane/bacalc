@@ -8,7 +8,6 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faBeer, faWineGlassAlt, faGlassWhiskey, faHome, faChartBar, faCog } from '@fortawesome/free-solid-svg-icons'
 import { dom } from '@fortawesome/fontawesome-svg-core'
 import "./registerServiceWorker"
-import db from "../api"
 
 Vue.config.productionTip = false
 
@@ -24,32 +23,37 @@ Vue.mixin({
         return
       this.$router.push({ path: route });
     },
+    getMetabolized(time) {
+      const lastUpdate = this.$store.state.lastUpdate;
+      const diff = time - new Date(lastUpdate);
+
+      return (diff / (24 * 60 * 60 * 1000)) * 0.015;
+    },
     // This is the main algorithm for calculating the user's
     // current BAC.
-    async calculateBAC(timeNow, sex, weight, weightLabel) {
+    calculateBAC(now, oz, pct) {
+      // load settings
+      const sex = this.$store.state.settings.sex;
+      const weight = this.$store.state.settings.weight;
+      const weightLabel = this.$store.state.settings.weightLabel;
+      const oldBAC = this.$store.state.currentBAC;
+
+      if (!sex || !weight) {
+        console.log("WIP!");
+        return;
+      }
+
       // sex ratio
       const r = sex === "Male" ? 0.55 : 0.68;
 
-      // Calculate weight in grams based on kg or lbs
-      let weightInGrams = this.getWeightInGrams(weight, weightLabel);
+      const weightInGrams = weightLabel === "Lb" ? weight * 453.29 : weight * 1000.0;
+      const alcInGrams = oz && pct ? oz * 28.35 * (pct / 100.0) : 14.0;
+      let newBAC = oldBAC + (alcInGrams / (weightInGrams * r)) * 100.0;
 
-      // Get drinks from the past 12 hours and sum alcohol content
-      let bacTotal = 0;
-      const pastDrinks = await db.getDrinksPastNHours(12);
+      // Update based on time passed since last update
+      newBAC = Math.max(0, newBAC - this.getMetabolized(now));
 
-      for (var i = 0; i < pastDrinks.length; i++) {
-        let drink = pastDrinks[i];
-        // calculate time between current drink and first drink in the past 24 hours
-        const elapsed = (timeNow - new Date().getTime()) / (60 * 60 * 1000);
-        // prevent negative bac values
-        bacTotal += Math.max(
-          (this.alcInGrams(drink.oz, drink.pct) / (weightInGrams * r)) * 100.0 -
-          elapsed * 0.015,
-          0
-        );
-      }
-
-      return bacTotal;
+      return newBAC;
     },
   }
 })

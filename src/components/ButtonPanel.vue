@@ -46,8 +46,6 @@
 </template>
 
 <script>
-import db from "../../api";
-
 export default {
   name: "ButtonPanel",
 
@@ -57,39 +55,11 @@ export default {
   }),
 
   methods: {
-    getWeightInGrams(weight, weightLabel) {
-      return weightLabel === "Lb" ? weight * 453.29 : weight * 1000.0;
-    },
-    alcInGrams(oz, pct) {
-      return oz && pct ? oz * 28.35 * (pct / 100.0) : 14.0;
-    },
-    async addDrink() {
-      const sex = this.$store.state.settings.sex;
-      const weight = this.$store.state.settings.weight;
-      const weightLabel = this.$store.state.settings.weightLabel;
-
-      const r = sex === "Male" ? 0.55 : 0.68;
-
+    addDrink() {
       const now = new Date();
+      let bac = this.calculateBAC(now, this.oz, this.pct);
 
-      if (!sex || !weight) {
-        console.log("WIP!");
-        return;
-      }
-
-      // First, calculate the current BAC based on past drinks in the last 12 hours.
-      // Then indepdently calculate the new BAC, and then add together.
-      const currentBAC = await this.calculateBAC(now, sex, weight, weightLabel);
-      const newBAC =
-        (this.alcInGrams(this.oz, this.pct) /
-          (this.getWeightInGrams(weight, weightLabel) * r)) *
-        100.0;
-      const totalBAC = currentBAC + newBAC;
-
-      // Add the total BAC so we can handle it in other components
-      this.$store.commit("ADD_BAC", { bac: totalBAC, time: now });
-      // Store only the newly added bac in the db
-      await db.addDrink(now, newBAC, this.oz, this.pct);
+      this.$store.commit("SET_BAC", { bac: bac, date: now });
     },
   },
 };

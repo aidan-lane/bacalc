@@ -10,9 +10,12 @@ export default new Vuex.Store({
       weight: localStorage.weight || "",
       weightLabel: localStorage.weightLabel || "Lb",
     },
+
     pastBACs: [],
     pastBACLabels: [],
-    currentBAC: 0.0,
+
+    currentBAC: Number(localStorage.getItem("currentBAC")) || 0.0,
+    lastUpdate: localStorage.getItem("lastUpdate") || new Date()
   },
   mutations: {
     SET_SEX(state, val) {
@@ -27,19 +30,11 @@ export default new Vuex.Store({
       state.settings.weightLabel = val;
       localStorage.weightLabel = val;
     },
-    ADD_BAC(state, data) {
-      if (state.pastBACs.length >= 6) {
-        state.pastBACs.shift();
-        state.pastBACLabels.shift();
-      }
-      state.pastBACs.push(data.bac);
-      state.pastBACLabels.push(data.time);
-
-      // also update total
+    SET_BAC(state, data) {
       state.currentBAC = data.bac;
-    },
-    SET_BAC(state, bac) {
-      state.currentBAC = bac;
+      // save so we can access after a user leaves this session
+      localStorage.setItem("currentBAC", data.bac);
+      localStorage.setItem("lastUpdate", new Date(data.date));
     }
   },
   actions: {

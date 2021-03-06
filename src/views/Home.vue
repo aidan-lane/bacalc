@@ -37,7 +37,15 @@ export default {
     currentBAC: 0.0,
   }),
 
-  mounted() {},
+  mounted() {
+    // whenever this component is mounted (i.e. on load), we want
+    // to update the user's current BAC.
+    const bac = this.$store.state.currentBAC;
+    const now = new Date();
+
+    const newBAC = Math.max(0, bac - this.getMetabolized(now));
+    this.$store.commit("SET_BAC", { bac: newBAC, date: now });
+  },
 
   computed: {
     // Gets your total BAC

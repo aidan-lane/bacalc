@@ -7,11 +7,15 @@
       >
         Your BAC
       </h3>
-      <Counter :bac="currentBAC" style="margin-top: -1.7em" class="text-center">
+      <Counter
+        :bac.sync="getBAC"
+        style="margin-top: -1.7em"
+        class="text-center"
+      >
       </Counter>
       <Meter
         style="margin-left: 6%; margin-right: 6%"
-        :bac.sync="currentBAC"
+        :bac.sync="getBAC"
       ></Meter>
     </v-card>
   </v-container>
@@ -29,9 +33,24 @@ export default {
     Meter,
   },
 
-  data: () => ({
-    currentBAC: 0.0,
-  }),
+  data: () => ({}),
+
+  mounted() {
+    // whenever this component is mounted (i.e. on load), we want
+    // to update the user's current BAC.
+    const bac = this.$store.state.currentBAC;
+    const now = new Date();
+
+    const newBAC = Math.max(0, bac - this.getMetabolized(now));
+    this.$store.commit("SET_BAC", { bac: newBAC, date: now, isDrink: false });
+  },
+
+  computed: {
+    // Gets your total BAC
+    getBAC() {
+      return this.$store.state.currentBAC;
+    },
+  },
 };
 </script>
 

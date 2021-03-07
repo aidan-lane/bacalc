@@ -6,6 +6,7 @@
         <v-row class="sex-row" justify="space-around">
           <v-col cols="8">
             <v-text-field
+              v-model="weight"
               label="Weight"
               solo
               rounded
@@ -14,12 +15,12 @@
             </v-text-field>
           </v-col>
           <v-col cols="4">
-            <v-select v-model="cWeight" :items="weightLabels"></v-select>
+            <v-select v-model="weightLabel" :items="weightLabels"></v-select>
           </v-col>
         </v-row>
         <v-row class="weight-row" justify="space-around">
           <v-col cols="8">
-            <v-select label="Sex" v-model="cSex" :items="sexes"></v-select>
+            <v-select label="Sex" v-model="sex" :items="sexes"></v-select>
           </v-col>
         </v-row>
       </v-col>
@@ -32,15 +33,34 @@ export default {
   name: "Settings",
 
   data: () => ({
-    cWeight: "Lb",
+    weight: "",
+    weightLabel: "Lb",
     weightLabels: ["Lb", "Kg"],
-    cSex: "",
+    sex: "",
     sexes: ["Male", "Female"],
     rules: {
       required: (value) => !!value || "Required!",
       number: (value) => !isNaN(parseFloat(value)) || "Must be a valid weight!",
     },
   }),
+
+  mounted() {
+    this.sex = this.$store.state.settings.sex;
+    this.weight = this.$store.state.settings.weight;
+    this.weightLabel = this.$store.state.settings.weightLabel;
+  },
+
+  watch: {
+    sex: function (newSex) {
+      this.$store.commit("SET_SEX", newSex);
+    },
+    weight: function (newWeight) {
+      this.$store.commit("SET_WEIGHT", newWeight);
+    },
+    weightLabel: function (newWeightLabel) {
+      this.$store.commit("SET_WEIGHT_LABEL", newWeightLabel);
+    },
+  },
 };
 </script>
 

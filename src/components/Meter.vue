@@ -24,15 +24,21 @@ export default {
   },
 
   data: () => ({
-    marginSize: 6.3,
+    marginMin: 6.3,
+    marginMax: 89.0,
   }),
 
   computed: {
     // Scale the BAC value to a percentage
     getTickLocation() {
-      let bacRange = 0.25 - 0;
-      let scaledRange = 89 - this.marginSize;
-      let newVal = (this.bac * scaledRange) / bacRange + this.marginSize;
+      let bacRange = 0.35 - 0;
+      let scaledRange = this.marginMax - this.marginMin;
+      // prevent tick from going off the bar
+      let newVal = Math.min(
+        (this.bac * scaledRange) / bacRange + this.marginMin,
+        this.marginMax
+      );
+
       return "margin-left: " + newVal + "%";
     },
   },

@@ -4,7 +4,7 @@
       <v-col cols="12">
         <v-row justify="space-around">
           <v-col cols="12">
-            <v-btn block rounded color="button_color">
+            <v-btn block rounded color="button_color" @click="addDrink">
               <div class="alc-btn-text">+1</div>
               <i class="fas fa-beer fa-2x btn-text alc-icon"></i>
               <i class="fas fa-wine-glass-alt fa-2x alc-icon"></i>
@@ -15,16 +15,28 @@
 
         <v-row class="custom-input">
           <v-col cols="6">
-            <v-text-field rounded solo suffix="oz" background-color="primary" />
+            <v-text-field
+              rounded
+              solo
+              suffix="oz"
+              background-color="primary"
+              v-model="oz"
+            />
           </v-col>
 
           <v-col cols="6">
-            <v-text-field rounded solo suffix="%" background-color="primary" />
+            <v-text-field
+              rounded
+              solo
+              suffix="%"
+              background-color="primary"
+              v-model="pct"
+            />
           </v-col>
         </v-row>
 
         <div class="text-xs-center" style="margin-top: -1.5em">
-          <v-btn block rounded color="button_color">
+          <v-btn block rounded color="button_color" @click="addDrink">
             <div style="font-weight: bold; font-size: 1.5em">+1</div>
           </v-btn>
         </div>
@@ -32,6 +44,29 @@
     </v-card>
   </v-container>
 </template>
+
+<script>
+export default {
+  name: "ButtonPanel",
+
+  data: () => ({
+    oz: "",
+    pct: "",
+  }),
+
+  methods: {
+    addDrink() {
+      const now = new Date();
+      let bac = this.calculateBAC(now, this.oz, this.pct);
+      if (bac === null) {
+        return;
+      }
+
+      this.$store.commit("SET_BAC", { bac: bac, date: now, isDrink: true });
+    },
+  },
+};
+</script>
 
 <style>
 .panel-card {

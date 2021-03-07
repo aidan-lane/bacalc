@@ -24,6 +24,7 @@
 
 <script>
 const gradients = [["#f72047", "#ffd200", "#1feaea"]];
+import db from "../../api";
 
 export default {
   data: () => ({
@@ -32,14 +33,68 @@ export default {
     padding: 16,
     lineCap: "round",
     gradient: gradients[0],
-    values: [0.0, 0.02, 0.08, 0.8],
-    labels: ["12pm", "1pm", "2pm", "3pm", "4pm"],
+    values: [],
+    labels: [],
     gradientDirection: "top",
     gradients,
     fill: false,
     type: "trend",
     autoLineWidth: false,
+    lookBack: 6,
   }),
+
+  methods: {
+    // converts a date string to a rounded, abbreviated hour.
+    // i.e. 2021-03-13 12:30 => 12pm
+    timeToString(time) {
+      const hour = time.getHours();
+      const conv = (hour + 24) % 12 || 12;
+      return hour >= 12 ? conv + "pm" : conv + "am";
+    },
+  },
+
+  mounted() {
+    // first get all of the bac calculations from the past,
+    // defined, lookback window.
+    db.getDrinksPastNHours(this.lookBack).then((bacList) => {
+      console.log(bacList);
+      let hours = new Map();
+      let currentTime = new Date();
+
+      // We initialize the map to have values of lists which will hold
+      // bac calculations in added order.
+      for (let i = 0; i < this.lookBack; i++) {
+        hours.set(this.timeToString(currentTime), []);
+        // Go back in time one hour
+        currentTime.setHours(currentTime.getHours() - 1);
+      }
+
+      // Iterate through each bac and add to it's respective hour.
+      for (let i = 0; i < bacList.length; i++) {
+        const key = this.timeToString(new Date(bacList[i].date));
+        hours.get(key).push(bacList[i].bac);
+      }
+
+      // Go through the first entry in each bucket to get
+      // the the bac value for that hour.
+      hours.forEach((val, key) => {
+        this.labels.unshift(key);
+        this.values.unshift(val[val.length - 1] || 0);
+      });
+    });
+  },
+
+  computed: {
+    bacs() {
+      return this.$store.state.pastBACs;
+    },
+  },
+
+  watch: {
+    bacs: function () {
+      console.log("test");
+    },
+  },
 };
 </script>
 

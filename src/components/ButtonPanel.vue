@@ -58,8 +58,11 @@ export default {
     addDrink() {
       const now = new Date();
       let bac = this.calculateBAC(now, this.oz, this.pct);
+      if (bac === null) {
+        return;
+      }
 
-      this.$store.commit("SET_BAC", { bac: bac, date: now });
+      this.$store.commit("SET_BAC", { bac: bac, date: now, isDrink: true });
     },
   },
 };

@@ -45,7 +45,7 @@ export default {
 
   methods: {
     // converts a date string to a rounded, abbreviated hour.
-    // ie.e 2021-03-13 12:30 => 12pm
+    // i.e. 2021-03-13 12:30 => 12pm
     timeToString(time) {
       const hour = time.getHours();
       const conv = (hour + 24) % 12 || 12;
@@ -54,23 +54,32 @@ export default {
   },
 
   mounted() {
-    // load bac data from last n hours
-    db.getDrinksPastNHours(this.lookBack).then((drinks) => {
+    // first get all of the bac calculations from the past,
+    // defined, lookback window.
+    db.getDrinksPastNHours(this.lookBack).then((bacList) => {
+      console.log(bacList);
       let hours = new Map();
-      let now = new Date();
+      let currentTime = new Date();
+
+      // We initialize the map to have values of lists which will hold
+      // bac calculations in added order.
       for (let i = 0; i < this.lookBack; i++) {
-        hours.set(this.timeToString(now), 0);
-        now.setHours(now.getHours() - 1); // go back one hour
+        hours.set(this.timeToString(currentTime), []);
+        // Go back in time one hour
+        currentTime.setHours(currentTime.getHours() - 1);
       }
 
-      for (let i = 0; i < drinks.length; i++) {
-        const key = this.timeToString(new Date(drinks[i].date));
-        hours.set(key, hours.get(key) + drinks[i].bac);
+      // Iterate through each bac and add to it's respective hour.
+      for (let i = 0; i < bacList.length; i++) {
+        const key = this.timeToString(new Date(bacList[i].date));
+        hours.get(key).push(bacList[i].bac);
       }
 
+      // Go through the first entry in each bucket to get
+      // the the bac value for that hour.
       hours.forEach((val, key) => {
-        this.values.unshift(val);
         this.labels.unshift(key);
+        this.values.unshift(val[val.length - 1] || 0);
       });
     });
   },

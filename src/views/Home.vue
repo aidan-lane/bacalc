@@ -15,7 +15,7 @@
       </Counter>
       <Meter
         style="margin-left: 6%; margin-right: 6%"
-        :bac.sync="currentBAC"
+        :bac.sync="getBAC"
       ></Meter>
     </v-card>
   </v-container>
@@ -33,9 +33,7 @@ export default {
     Meter,
   },
 
-  data: () => ({
-    currentBAC: 0.0,
-  }),
+  data: () => ({}),
 
   mounted() {
     // whenever this component is mounted (i.e. on load), we want
@@ -44,7 +42,7 @@ export default {
     const now = new Date();
 
     const newBAC = Math.max(0, bac - this.getMetabolized(now));
-    this.$store.commit("SET_BAC", { bac: newBAC, date: now });
+    this.$store.commit("SET_BAC", { bac: newBAC, date: now, isDrink: false });
   },
 
   computed: {

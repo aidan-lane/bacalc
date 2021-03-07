@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import db from '../../api'
 
 Vue.use(Vuex)
 
@@ -35,6 +36,9 @@ export default new Vuex.Store({
       // save so we can access after a user leaves this session
       localStorage.setItem("currentBAC", data.bac);
       localStorage.setItem("lastUpdate", new Date(data.date));
+
+      // also add this calculation to the db
+      db.addBAC(data.date, data.bac, data.isDrink);
     }
   },
   actions: {

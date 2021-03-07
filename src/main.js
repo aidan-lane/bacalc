@@ -27,7 +27,7 @@ Vue.mixin({
       const lastUpdate = this.$store.state.lastUpdate;
       const diff = time - new Date(lastUpdate);
 
-      return (diff / (24 * 60 * 60 * 1000)) * 0.015;
+      return (diff / (60 * 60 * 1000)) * 0.015;
     },
     // This is the main algorithm for calculating the user's
     // current BAC.
@@ -39,8 +39,7 @@ Vue.mixin({
       const oldBAC = this.$store.state.currentBAC;
 
       if (!sex || !weight) {
-        console.log("WIP!");
-        return;
+        return null;
       }
 
       // sex ratio

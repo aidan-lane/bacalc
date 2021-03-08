@@ -40,6 +40,7 @@ export default new Vuex.Store({
       localStorage.setItem("lastUpdate", new Date(data.date));
 
       // also add this calculation to the db
+      if (data.addToDB !== undefined && !data.addToDB) return;
       db.addBAC(data.date, data.bac, data.isDrink);
     },
     SET_TOS(state, val) {

@@ -40,9 +40,8 @@ export default {
 
     let db = await this.getDB();
 
-    let latest = this.getNDrinks(1);
-    let id = latest.id;
-    db.delete(BAC_TABLE, id);
+    let latest = (await this.getBAC(1))[0]
+    await db.delete(BAC_TABLE, latest.date)
   },
   // removes all bac entries before "before"
   async removeOlderBAC(before) {
@@ -51,10 +50,18 @@ export default {
 
     db.delete(BAC_TABLE, IDBKeyRange.upperBound(before));
   },
-  async getNDrinks(n) {
+  async getBAC(n) {
 
     let db = await this.getDB();
-    return await db.getAllFromIndex(BAC_TABLE, "date", null, n);
+
+    let cursor = await db.transaction(BAC_TABLE, "readwrite").store.openCursor(null, "prev");
+    let bacs = [];
+
+    while (cursor && bacs.length < n) {
+      bacs.push(cursor.value);
+    }
+
+    return bacs;
   },
   async getDrinksPastNHours(hours) {
 

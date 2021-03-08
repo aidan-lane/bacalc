@@ -1,5 +1,18 @@
 <template>
   <v-container>
+    <v-snackbar
+      v-model="undoBar"
+      :timeout="timeout"
+      top
+      rounded="pill"
+      color="green"
+      elevation="5"
+    >
+      Added a drink!
+      <template v-slot:action="{ attrs }">
+        <v-btn color="white" text v-bind="attrs" @click="undo"> Undo </v-btn>
+      </template>
+    </v-snackbar>
     <v-card class="panel-card" elevation="0" color="transparent">
       <v-col cols="12">
         <v-row style="margin-bottom: -15%">
@@ -49,6 +62,8 @@
 </template>
 
 <script>
+import db from "../../api";
+
 export default {
   name: "ButtonPanel",
 
@@ -60,6 +75,8 @@ export default {
         value === "" || /^\d+$/.test(value) || "Must be a number!",
     },
     showBubbles: false,
+    undoBar: false,
+    timeout: 3000,
   }),
 
   methods: {
@@ -72,6 +89,8 @@ export default {
       if (this.pct !== "" && this.isNumber(this.pct) === false) {
         return;
       }
+
+      this.undoBar = true;
 
       // bubbles animation
       this.showBubbles = true;
@@ -90,6 +109,20 @@ export default {
       // Reset vars
       this.oz = "";
       this.pct = "";
+    },
+    async undo() {
+      this.undoBar = false;
+      await db.removeLatestBAC();
+      let latest = (await db.getBAC(1))[0];
+      console.log(latest);
+
+      // Set current bac to last entry after removing last added
+      this.$store.commit("SET_BAC", {
+        bac: latest.bac,
+        date: latest.date,
+        isDrink: true,
+        addToDB: false,
+      });
     },
   },
 };

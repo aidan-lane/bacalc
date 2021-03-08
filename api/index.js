@@ -15,8 +15,8 @@ export default {
       // on init
       upgrade(db) {
         const store = db.createObjectStore(BAC_TABLE, {
-          keyPath: "id",
-          autoIncrement: true,
+          keyPath: "date",
+          autoIncrement: false,
         });
 
         // index date so we can query by latest time

@@ -64,8 +64,9 @@ export default {
 
   mounted() {
     // on mount, remove old db entries older than 24 hours
-    let now = new Date();
-    db.removeOlderBAC(now.setHours(now.getHours() - 24));
+    var yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    db.removeOlderBAC(yesterday);
   },
 
   methods: {

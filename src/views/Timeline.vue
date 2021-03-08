@@ -1,6 +1,6 @@
 <template>
   <v-container class="text-center">
-    <v-card class="time-card" elevation="5">
+    <v-card class="time-card" elevation="0" color="transparent">
       <h1 style="color: #dbdbdb; padding-top: 10%">Your Timeline</h1>
       <v-sparkline
         class="graph"
@@ -29,7 +29,7 @@ import db from "../../api";
 export default {
   data: () => ({
     width: 6,
-    radius: 3,
+    radius: 20,
     padding: 16,
     lineCap: "round",
     gradient: gradients[0],
@@ -54,10 +54,13 @@ export default {
   },
 
   mounted() {
+    // clear lists
+    this.labels = [];
+    this.values = [];
+
     // first get all of the bac calculations from the past,
     // defined, lookback window.
     db.getDrinksPastNHours(this.lookBack).then((bacList) => {
-      console.log(bacList);
       let hours = new Map();
       let currentTime = new Date();
 
@@ -89,12 +92,6 @@ export default {
       return this.$store.state.pastBACs;
     },
   },
-
-  watch: {
-    bacs: function () {
-      console.log("test");
-    },
-  },
 };
 </script>
 
@@ -109,7 +106,6 @@ text {
   margin-right: 0.4em;
   height: 50vh;
   border-radius: 26px !important;
-  background: linear-gradient(0deg, #c33764 0%, #1d2671 100%);
 }
 
 .graph {

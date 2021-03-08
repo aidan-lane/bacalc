@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-card raised class="main-card" elevation="5">
+    <v-card raised class="main-card" elevation="0" color="transparent">
       <h3
         class="bac-title font-weight-bold text-center"
         style="padding-top: 15%; color: #dbdbdb"
@@ -61,6 +61,5 @@ export default {
   margin-right: 0.4em;
   height: 50vh;
   border-radius: 26px !important;
-  background: linear-gradient(0deg, #185a9d 0%, #43cea2 100%);
 }
 </style>

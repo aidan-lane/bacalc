@@ -4,7 +4,9 @@
     fixed
     grow
     v-model="pages[currentPage]"
-    color="#1A5F9D"
+    color="#ffffff"
+    class="bar"
+    dark
   >
     <v-btn value="timeline" @click="setRoute('/timeline')">
       <span>Timeline</span>
@@ -43,4 +45,7 @@ export default {
 </script>
 
 <style scoped>
+.bar {
+  background: transparent !important;
+}
 </style>

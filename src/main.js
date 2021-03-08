@@ -18,6 +18,9 @@ dom.watch()
 // Mixins
 Vue.mixin({
   methods: {
+    isNumber(val) {
+      return /^\d+$/.test(val);
+    },
     setRoute: function (route) {
       if (this.$route.path === route)
         return

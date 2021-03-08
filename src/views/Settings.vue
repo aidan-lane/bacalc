@@ -1,6 +1,6 @@
 <template>
   <v-container class="text-center">
-    <v-card class="settings-card" elevation="5">
+    <v-card class="settings-card" elevation="0" color="transparent">
       <v-col cols="12">
         <h1 style="color: #dbdbdb; margin-bottom: 15%">Your Settings</h1>
         <v-row class="sex-row" justify="space-around">
@@ -40,7 +40,7 @@ export default {
     sexes: ["Male", "Female"],
     rules: {
       required: (value) => !!value || "Required!",
-      number: (value) => !isNaN(parseFloat(value)) || "Must be a valid weight!",
+      number: (value) => /^\d+$/.test(value) || "Must be a valid weight!",
     },
   }),
 
@@ -51,13 +51,14 @@ export default {
   },
 
   watch: {
-    sex: function (newSex) {
+    sex(newSex) {
       this.$store.commit("SET_SEX", newSex);
     },
-    weight: function (newWeight) {
+    weight(newWeight) {
+      if (!this.isNumber(this.weight)) return;
       this.$store.commit("SET_WEIGHT", newWeight);
     },
-    weightLabel: function (newWeightLabel) {
+    weightLabel(newWeightLabel) {
       this.$store.commit("SET_WEIGHT_LABEL", newWeightLabel);
     },
   },
@@ -72,7 +73,6 @@ export default {
   margin-right: 0.4em;
   height: 50vh;
   border-radius: 26px !important;
-  background: linear-gradient(0deg, #f3a183 0%, #ec6f66 100%);
 }
 
 .sex-row {

@@ -36,13 +36,20 @@ export default {
       drink: isDrink, // boolean
     });
   },
-  async removeBAC() {
+  async removeLatestBAC() {
 
     let db = await this.getDB();
 
     let latest = this.getNDrinks(1);
     let id = latest.id;
     db.delete(BAC_TABLE, id);
+  },
+  // removes all bac entries before "before"
+  async removeOlderBAC(before) {
+
+    let db = await this.getDB();
+
+    db.delete(BAC_TABLE, IDBKeyRange.upperBound(before));
   },
   async getNDrinks(n) {
 

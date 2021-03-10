@@ -55,7 +55,6 @@ export default {
       this.$store.commit("SET_SEX", newSex);
     },
     weight(newWeight) {
-      if (!this.isNumber(this.weight)) return;
       this.$store.commit("SET_WEIGHT", newWeight);
     },
     weightLabel(newWeightLabel) {

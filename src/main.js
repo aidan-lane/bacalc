@@ -28,8 +28,9 @@ Vue.mixin({
     },
     getMetabolized(time) {
       const lastUpdate = this.$store.state.lastUpdate;
-      const diff = time - new Date(lastUpdate);
+      if (time < lastUpdate) return 0;
 
+      const diff = time - new Date(lastUpdate);
       return (diff / (60 * 60 * 1000)) * 0.015;
     },
     // This is the main algorithm for calculating the user's
@@ -40,10 +41,6 @@ Vue.mixin({
       const weight = this.$store.state.settings.weight;
       const weightLabel = this.$store.state.settings.weightLabel;
       const oldBAC = this.$store.state.currentBAC;
-
-      if (!sex || !weight) {
-        return null;
-      }
 
       // sex ratio
       const r = sex === "Male" ? 0.55 : 0.68;

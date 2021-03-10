@@ -13,6 +13,23 @@
         <v-btn color="white" text v-bind="attrs" @click="undo"> Undo </v-btn>
       </template>
     </v-snackbar>
+
+    <v-snackbar
+      v-model="showWarning"
+      :timeout="timeout"
+      top
+      rounded="pill"
+      color="red"
+      elevation="5"
+    >
+      Please enter your settings!
+      <template v-slot:action="{ attrs }">
+        <v-btn color="white" text v-bind="attrs" @click="gotoSettings">
+          Goto Settings
+        </v-btn>
+      </template>
+    </v-snackbar>
+
     <v-card class="panel-card" elevation="0" color="transparent">
       <v-col cols="12">
         <v-row style="margin-bottom: -15%">
@@ -77,26 +94,39 @@ export default {
     showBubbles: false,
     undoBar: false,
     timeout: 3000,
+    showWarning: false,
   }),
 
   methods: {
     addDrink() {
       // Don't calculate if not valid numbers
       if (this.oz !== "" && this.isNumber(this.oz) === false) {
+        this.oz = "";
+        this.pct = "";
         return;
       }
 
       if (this.pct !== "" && this.isNumber(this.pct) === false) {
+        this.oz = "";
+        this.pct = "";
         return;
+      }
+
+      // Don't do anything if the settings aren't filled out
+      const sex = this.$store.state.settings.sex;
+      const weight = this.$store.state.settings.weight;
+      if (!sex || !weight || !this.isNumber(weight)) {
+        this.showWarning = true;
+        return null;
       }
 
       this.undoBar = true;
 
       // bubbles animation
       this.showBubbles = true;
-      this.timer = window.setTimeout(() => {
+      window.setTimeout(() => {
         this.showBubbles = false;
-      }, 4000);
+      }, 2000);
 
       const now = new Date();
       let bac = this.calculateBAC(now, this.oz, this.pct);
@@ -114,7 +144,6 @@ export default {
       this.undoBar = false;
       await db.removeLatestBAC();
       let latest = (await db.getBAC(1))[0];
-      console.log(latest);
 
       // Set current bac to last entry after removing last added
       this.$store.commit("SET_BAC", {
@@ -123,6 +152,10 @@ export default {
         isDrink: true,
         addToDB: false,
       });
+    },
+    gotoSettings() {
+      this.showWarning = false;
+      this.setRoute("/settings");
     },
   },
 };
@@ -176,13 +209,13 @@ body {
   -moz-transform: scale(0.9);
   transform: scale(0.9);
   opacity: 0.2;
-  animation: moveclouds 3s linear infinite,
+  animation: moveclouds 2.5s linear infinite,
     sideWays 4s ease-in-out infinite alternate;
-  -webkit-animation: moveclouds 3s linear infinite,
+  -webkit-animation: moveclouds 2.5s linear infinite,
     sideWays 4s ease-in-out infinite alternate;
-  -moz-animation: moveclouds 3s linear infinite,
+  -moz-animation: moveclouds 2.5s linear infinite,
     sideWays 4s ease-in-out infinite alternate;
-  -o-animation: moveclouds 3s linear infinite,
+  -o-animation: moveclouds 2.5s linear infinite,
     sideWays 4s ease-in-out infinite alternate;
 }
 
@@ -192,14 +225,14 @@ body {
   -moz-transform: scale(0.6);
   transform: scale(0.6);
   opacity: 0.5;
-  animation: moveclouds 2s linear infinite,
-    sideWays 5s ease-in-out infinite alternate;
-  -webkit-animation: moveclouds 2s linear infinite,
-    sideWays 5s ease-in-out infinite alternate;
-  -moz-animation: moveclouds 2s linear infinite,
-    sideWays 5s ease-in-out infinite alternate;
-  -o-animation: moveclouds 2s linear infinite,
-    sideWays 5s ease-in-out infinite alternate;
+  animation: moveclouds 2.3s linear infinite,
+    sideWays 4s ease-in-out infinite alternate;
+  -webkit-animation: moveclouds 2.3s linear infinite,
+    sideWays 4s ease-in-out infinite alternate;
+  -moz-animation: moveclouds 2.3s linear infinite,
+    sideWays 4s ease-in-out infinite alternate;
+  -o-animation: moveclouds 2.3s linear infinite,
+    sideWays 4s ease-in-out infinite alternate;
 }
 
 .x3 {
@@ -208,14 +241,14 @@ body {
   -moz-transform: scale(0.8);
   transform: scale(0.8);
   opacity: 0.3;
-  animation: moveclouds 3s linear infinite,
-    sideWays 4s ease-in-out infinite alternate;
-  -webkit-animation: moveclouds 3s linear infinite,
-    sideWays 4s ease-in-out infinite alternate;
-  -moz-animation: moveclouds 3s linear infinite,
-    sideWays 4s ease-in-out infinite alternate;
-  -o-animation: moveclouds 3s linear infinite,
-    sideWays 4s ease-in-out infinite alternate;
+  animation: moveclouds 2s linear infinite,
+    sideWays 2s ease-in-out infinite alternate;
+  -webkit-animation: moveclouds 2s linear infinite,
+    sideWays 2s ease-in-out infinite alternate;
+  -moz-animation: moveclouds 2s linear infinite,
+    sideWays 2s ease-in-out infinite alternate;
+  -o-animation: moveclouds 2s linear infinite,
+    sideWays 2s ease-in-out infinite alternate;
 }
 
 .x4 {
@@ -224,14 +257,14 @@ body {
   -moz-transform: scale(0.75);
   transform: scale(0.75);
   opacity: 0.35;
-  animation: moveclouds 3.3s linear infinite,
-    sideWays 2s ease-in-out infinite alternate;
-  -webkit-animation: moveclouds 3.3s linear infinite,
-    sideWays 2s ease-in-out infinite alternate;
-  -moz-animation: moveclouds 3.3s linear infinite,
-    sideWays 2s ease-in-out infinite alternate;
-  -o-animation: moveclouds 3.3s linear infinite,
-    sideWays 2s ease-in-out infinite alternate;
+  animation: moveclouds 2.1s linear infinite,
+    sideWays 1s ease-in-out infinite alternate;
+  -webkit-animation: moveclouds 2.1s linear infinite,
+    sideWays 1s ease-in-out infinite alternate;
+  -moz-animation: moveclouds 2.1s linear infinite,
+    sideWays 1s ease-in-out infinite alternate;
+  -o-animation: moveclouds 2.1s linear infinite,
+    sideWays 1s ease-in-out infinite alternate;
 }
 
 .x5 {
@@ -240,22 +273,24 @@ body {
   -moz-transform: scale(0.8);
   transform: scale(0.8);
   opacity: 0.3;
-  animation: moveclouds 4s linear infinite,
+  animation: moveclouds 3s linear infinite,
     sideWays 1s ease-in-out infinite alternate;
-  -webkit-animation: moveclouds 4s linear infinite,
+  -webkit-animation: moveclouds 3s linear infinite,
     sideWays 1s ease-in-out infinite alternate;
-  -moz-animation: moveclouds 4s linear infinite,
+  -moz-animation: moveclouds 3s linear infinite,
     sideWays 1s ease-in-out infinite alternate;
-  -o-animation: moveclouds 4s linear infinite,
+  -o-animation: moveclouds 3s linear infinite,
     sideWays 1s ease-in-out infinite alternate;
 }
 
 @keyframes moveclouds {
   0% {
     top: 50px;
+    opacity: 1;
   }
   100% {
     top: -500px;
+    opacity: 0;
   }
 }
 
@@ -271,9 +306,11 @@ body {
 @-webkit-keyframes moveclouds {
   0% {
     top: 500px;
+    opacity: 1;
   }
   100% {
     top: -500px;
+    opacity: 0;
   }
 }
 
@@ -289,9 +326,11 @@ body {
 @-moz-keyframes moveclouds {
   0% {
     top: 500px;
+    opacity: 1;
   }
   100% {
     top: -500px;
+    opacity: 0;
   }
 }
 
@@ -307,9 +346,11 @@ body {
 @-o-keyframes moveclouds {
   0% {
     top: 500px;
+    opacity: 1;
   }
   100% {
     top: -500px;
+    opacity: 0;
   }
 }
 

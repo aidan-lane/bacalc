@@ -2,8 +2,8 @@
   <v-container>
     <v-card raised class="main-card" elevation="0" color="transparent">
       <h3
-        class="bac-title font-weight-bold text-center"
-        style="padding-top: 15%; color: #dbdbdb"
+        class="font-weight-bold text-center"
+        style="padding-top: 15%; color: #dbdbdb; text-shadow: 2px 2px #00000008"
       >
         Your BAC
       </h3>

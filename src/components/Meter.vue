@@ -51,6 +51,7 @@ export default {
   height: 10px;
   border-radius: 6px;
   background: linear-gradient(90deg, green, yellow, red);
+  box-shadow: 0x -5px 5px whitesmoke;
 }
 
 .container {

@@ -35,6 +35,7 @@ export default new Vuex.Store({
     },
     SET_BAC(state, data) {
       state.currentBAC = data.bac;
+      state.lastUpdate = data.date;
       // save so we can access after a user leaves this session
       localStorage.setItem("currentBAC", data.bac);
       localStorage.setItem("lastUpdate", new Date(data.date));

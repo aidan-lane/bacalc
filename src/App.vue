@@ -17,7 +17,7 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="Black" text @click="acceptTerms"> I accept </v-btn>
+          <v-btn color="black" text @click="acceptTerms"> I accept </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

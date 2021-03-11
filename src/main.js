@@ -5,14 +5,14 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify';
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faBeer, faWineGlassAlt, faGlassWhiskey, faHome, faChartBar, faCog } from '@fortawesome/free-solid-svg-icons'
+import { faBeer, faWineGlassAlt, faGlassWhiskey, faHome, faChartBar, faCog, faMinusCircle } from '@fortawesome/free-solid-svg-icons'
 import { dom } from '@fortawesome/fontawesome-svg-core'
 import "./registerServiceWorker"
 
 Vue.config.productionTip = false
 
 // Font-Awesome icons
-library.add(faBeer, faWineGlassAlt, faGlassWhiskey, faHome, faChartBar, faCog)
+library.add(faBeer, faWineGlassAlt, faGlassWhiskey, faHome, faChartBar, faCog, faMinusCircle)
 dom.watch()
 
 // Mixins
@@ -31,6 +31,7 @@ Vue.mixin({
       if (time < lastUpdate) return 0;
 
       const diff = time - new Date(lastUpdate);
+      console.log(diff)
       return (diff / (60 * 60 * 1000)) * 0.015;
     },
     // This is the main algorithm for calculating the user's

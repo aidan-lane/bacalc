@@ -7,12 +7,14 @@
       >
         Your BAC
       </h3>
+
       <Counter
         :bac.sync="getBAC"
         style="margin-top: -1.7em"
         class="text-center"
       >
       </Counter>
+
       <Meter
         style="margin-left: 6%; margin-right: 6%"
         :bac.sync="getBAC"

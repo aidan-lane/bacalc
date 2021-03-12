@@ -25,5 +25,6 @@ export default {
 <style scoped>
 .bac {
   font-size: 7em;
+  text-shadow: 2px 2px #00000013;
 }
 </style>

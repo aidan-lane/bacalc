@@ -15,8 +15,8 @@ export default {
       // on init
       upgrade(db) {
         const store = db.createObjectStore(BAC_TABLE, {
-          keyPath: "id",
-          autoIncrement: true,
+          keyPath: "date",
+          autoIncrement: false,
         });
 
         // index date so we can query by latest time
@@ -36,18 +36,32 @@ export default {
       drink: isDrink, // boolean
     });
   },
-  async removeBAC() {
+  async removeLatestBAC() {
 
     let db = await this.getDB();
 
-    let latest = this.getNDrinks(1);
-    let id = latest.id;
-    db.delete(BAC_TABLE, id);
+    let latest = (await this.getBAC(1))[0]
+    await db.delete(BAC_TABLE, latest.date)
   },
-  async getNDrinks(n) {
+  // removes all bac entries before "before"
+  async removeOlderBAC(before) {
 
     let db = await this.getDB();
-    return await db.getAllFromIndex(BAC_TABLE, "date", null, n);
+
+    db.delete(BAC_TABLE, IDBKeyRange.upperBound(before));
+  },
+  async getBAC(n) {
+
+    let db = await this.getDB();
+
+    let cursor = await db.transaction(BAC_TABLE, "readwrite").store.openCursor(null, "prev");
+    let bacs = [];
+
+    while (cursor && bacs.length < n) {
+      bacs.push(cursor.value);
+    }
+
+    return bacs;
   },
   async getDrinksPastNHours(hours) {
 

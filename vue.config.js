@@ -5,7 +5,7 @@ module.exports = {
   pwa: {
     name: "bac-calc",
     short_name: "bac",
-    themeColor: "000000",
+    themeColor: "#000000",
     workboxPluginMode: "GenerateSW",
   }
 }

@@ -5,19 +5,22 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify';
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faBeer, faWineGlassAlt, faGlassWhiskey, faHome, faChartBar, faCog } from '@fortawesome/free-solid-svg-icons'
+import { faBeer, faWineGlassAlt, faGlassWhiskey, faHome, faChartBar, faCog, faMinusCircle } from '@fortawesome/free-solid-svg-icons'
 import { dom } from '@fortawesome/fontawesome-svg-core'
 import "./registerServiceWorker"
 
 Vue.config.productionTip = false
 
 // Font-Awesome icons
-library.add(faBeer, faWineGlassAlt, faGlassWhiskey, faHome, faChartBar, faCog)
+library.add(faBeer, faWineGlassAlt, faGlassWhiskey, faHome, faChartBar, faCog, faMinusCircle)
 dom.watch()
 
 // Mixins
 Vue.mixin({
   methods: {
+    isNumber(val) {
+      return /^\d+$/.test(val);
+    },
     setRoute: function (route) {
       if (this.$route.path === route)
         return
@@ -25,8 +28,10 @@ Vue.mixin({
     },
     getMetabolized(time) {
       const lastUpdate = this.$store.state.lastUpdate;
-      const diff = time - new Date(lastUpdate);
+      if (time < lastUpdate) return 0;
 
+      const diff = time - new Date(lastUpdate);
+      console.log(diff)
       return (diff / (60 * 60 * 1000)) * 0.015;
     },
     // This is the main algorithm for calculating the user's
@@ -37,10 +42,6 @@ Vue.mixin({
       const weight = this.$store.state.settings.weight;
       const weightLabel = this.$store.state.settings.weightLabel;
       const oldBAC = this.$store.state.currentBAC;
-
-      if (!sex || !weight) {
-        return null;
-      }
 
       // sex ratio
       const r = sex === "Male" ? 0.55 : 0.68;

@@ -1,14 +1,30 @@
 <template>
-  <v-app id="app">
-    <v-snackbar
-      bottom
-      right
-      :value="updateExists"
-      :timeout="-1"
-      color="primary"
-    >
+  <v-app :id.sync="getID">
+    <v-dialog v-model="readTOS" width="500">
+      <v-card>
+        <v-card-title class="headline grey lighten-2">
+          Terms of Service
+        </v-card-title>
+
+        <v-card-text style="margin-top: 1em">
+          This app only serves as an approximation and in no way is a legal
+          indicator of your blood alcohol content. We are not responsible for
+          any actions you make while using this app and by agreeing to these
+          terms you are also indicating that you are of the legal age to drink.
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="black" text @click="acceptTerms"> I accept </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-snackbar bottom right :value="updateExists" :timeout="-1" color="green">
       An update is available
-      <v-btn text @click="refreshApp"> Update </v-btn>
+      <v-btn text color="white" @click="refreshApp"> Refresh </v-btn>
     </v-snackbar>
     <v-main
       v-touch="{ left: () => swipe('left'), right: () => swipe('right') }"
@@ -28,6 +44,7 @@
 import ButtonPanel from "@/components/ButtonPanel";
 import BottomNav from "@/components/BottomNav";
 import update from "@/mixins/update";
+import db from "../api";
 
 export default {
   name: "BACalc",
@@ -42,9 +59,22 @@ export default {
   data: () => ({
     transitionName: null,
     page: 1,
+    test: "home",
   }),
 
+  mounted() {
+    // on mount, remove old db entries older than 24 hours
+    var yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    db.removeOlderBAC(yesterday);
+  },
+
   methods: {
+    acceptTerms() {
+      // set tos to read
+      localStorage.setItem("tos", true);
+      this.$store.commit("SET_TOS", true);
+    },
     // Handle state transitions based on swipe direction
     swipe(dir) {
       if (this.$route.path === "/" && dir === "left") {
@@ -60,6 +90,15 @@ export default {
         this.setRoute("/");
         this.page++;
       }
+    },
+  },
+
+  computed: {
+    getID() {
+      return this.$route.name.toLowerCase();
+    },
+    readTOS() {
+      return !this.$store.state.readTOS;
     },
   },
 
@@ -83,8 +122,16 @@ export default {
 </script>
 
 <style>
-#app {
-  background: var(--v-primary-base);
+#home {
+  background: linear-gradient(0deg, #185a9d 0%, #43cea2 100%);
+}
+
+#settings {
+  background: linear-gradient(0deg, #f3a183 0%, #ec6f66 100%);
+}
+
+#timeline {
+  background: linear-gradient(0deg, #c33764 0%, #1d2671 100%);
 }
 
 .slideable-page {

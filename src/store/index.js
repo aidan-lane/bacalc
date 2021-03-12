@@ -16,7 +16,9 @@ export default new Vuex.Store({
     pastBACLabels: [],
 
     currentBAC: Number(localStorage.getItem("currentBAC")) || 0.0,
-    lastUpdate: localStorage.getItem("lastUpdate") || new Date()
+    lastUpdate: localStorage.getItem("lastUpdate") || new Date(),
+
+    readTOS: localStorage.getItem("tos") || false,
   },
   mutations: {
     SET_SEX(state, val) {
@@ -33,13 +35,18 @@ export default new Vuex.Store({
     },
     SET_BAC(state, data) {
       state.currentBAC = data.bac;
+      state.lastUpdate = data.date;
       // save so we can access after a user leaves this session
       localStorage.setItem("currentBAC", data.bac);
       localStorage.setItem("lastUpdate", new Date(data.date));
 
       // also add this calculation to the db
+      if (data.addToDB !== undefined && !data.addToDB) return;
       db.addBAC(data.date, data.bac, data.isDrink);
-    }
+    },
+    SET_TOS(state, val) {
+      state.readTOS = val;
+    },
   },
   actions: {
   },

@@ -1,9 +1,27 @@
 <template>
   <v-container class="text-center">
-    <v-card class="settings-card" elevation="5">
+    <v-dialog v-model="resetConfirm" width="500">
+      <v-card>
+        <v-card-title class="headline grey lighten-2"> Reset </v-card-title>
+
+        <v-card-text style="margin-top: 1em; font-size: 1.3em">
+          Are you sure you want to reset your BAC?
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="red" text @click="reset" x-large rounded>
+            Reset!
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-card class="settings-card" elevation="0" color="transparent">
       <v-col cols="12">
         <h1 style="color: #dbdbdb; margin-bottom: 15%">Your Settings</h1>
-        <v-row class="sex-row" justify="space-around">
+        <v-row class="sex-row">
           <v-col cols="8">
             <v-text-field
               v-model="weight"
@@ -18,9 +36,22 @@
             <v-select v-model="weightLabel" :items="weightLabels"></v-select>
           </v-col>
         </v-row>
-        <v-row class="weight-row" justify="space-around">
-          <v-col cols="8">
+        <v-row justify="space-around">
+          <v-col cols="6">
             <v-select label="Sex" v-model="sex" :items="sexes"></v-select>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col class="text-center">
+            <v-btn
+              icon
+              color="red"
+              class="text-center"
+              style="margin-top: -10%; padding-bottom: -5em"
+              @click="resetConfirm = true"
+            >
+              <v-icon x-small>fas fa-minus-circle fa-xs</v-icon>
+            </v-btn>
           </v-col>
         </v-row>
       </v-col>
@@ -40,8 +71,9 @@ export default {
     sexes: ["Male", "Female"],
     rules: {
       required: (value) => !!value || "Required!",
-      number: (value) => !isNaN(parseFloat(value)) || "Must be a valid weight!",
+      number: (value) => /^\d+$/.test(value) || "Must be a valid weight!",
     },
+    resetConfirm: false,
   }),
 
   mounted() {
@@ -50,14 +82,26 @@ export default {
     this.weightLabel = this.$store.state.settings.weightLabel;
   },
 
+  methods: {
+    reset() {
+      this.$store.commit("SET_BAC", {
+        bac: 0.0,
+        date: Date.now(),
+        isDrink: false,
+        addToDB: false,
+      });
+      this.resetConfirm = false;
+    },
+  },
+
   watch: {
-    sex: function (newSex) {
+    sex(newSex) {
       this.$store.commit("SET_SEX", newSex);
     },
-    weight: function (newWeight) {
+    weight(newWeight) {
       this.$store.commit("SET_WEIGHT", newWeight);
     },
-    weightLabel: function (newWeightLabel) {
+    weightLabel(newWeightLabel) {
       this.$store.commit("SET_WEIGHT_LABEL", newWeightLabel);
     },
   },
@@ -72,7 +116,6 @@ export default {
   margin-right: 0.4em;
   height: 50vh;
   border-radius: 26px !important;
-  background: linear-gradient(0deg, #f3a183 0%, #ec6f66 100%);
 }
 
 .sex-row {

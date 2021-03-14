@@ -36,7 +36,7 @@
       <ButtonPanel> </ButtonPanel>
     </v-main>
 
-    <BottomNav :currentPage.sync="page" />
+    <BottomNav />
   </v-app>
 </template>
 
@@ -58,8 +58,6 @@ export default {
 
   data: () => ({
     transitionName: null,
-    page: 1,
-    test: "home",
   }),
 
   mounted() {
@@ -79,16 +77,20 @@ export default {
     swipe(dir) {
       if (this.$route.path === "/" && dir === "left") {
         this.setRoute("/settings");
-        this.page++;
+        document.getElementById("settingsButton").focus();
+        this.$store.commit("SET_PAGE", 2);
       } else if (this.$route.path === "/" && dir === "right") {
         this.setRoute("/timeline");
-        this.page--;
+        document.getElementById("timelineButton").focus();
+        this.$store.commit("SET_PAGE", 0);
       } else if (this.$route.path === "/settings" && dir === "right") {
         this.setRoute("/");
-        this.page--;
+        document.getElementById("homeButton").focus();
+        this.$store.commit("SET_PAGE", 1);
       } else if (this.$route.path === "/timeline" && dir === "left") {
         this.setRoute("/");
-        this.page++;
+        document.getElementById("homeButton").focus();
+        this.$store.commit("SET_PAGE", 1);
       }
     },
   },

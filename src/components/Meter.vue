@@ -1,6 +1,6 @@
 <template>
   <div c>
-    <div class="tick" :style="getTickLocation">⏷</div>
+    <i class="tick fas fa-sort-down" :style="getTickLocation"></i>
     <v-sheet class="bar"> </v-sheet>
     <div class="container">
       <div>🙂</div>
@@ -24,7 +24,7 @@ export default {
   },
 
   data: () => ({
-    marginMin: 6.3,
+    marginMin: 7.5,
     marginMax: 89.0,
   }),
 

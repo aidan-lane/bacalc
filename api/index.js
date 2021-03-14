@@ -47,8 +47,12 @@ export default {
   async removeOlderBAC(before) {
 
     let db = await this.getDB();
-
     db.delete(BAC_TABLE, IDBKeyRange.upperBound(before));
+  },
+  async removeAllBAC() {
+
+    let db = await this.getDB();
+    db.clear();
   },
   async getBAC(n) {
 

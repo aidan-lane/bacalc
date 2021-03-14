@@ -19,6 +19,8 @@ export default new Vuex.Store({
     lastUpdate: localStorage.getItem("lastUpdate") || new Date(),
 
     readTOS: localStorage.getItem("tos") || false,
+
+    currentPage: 1
   },
   mutations: {
     SET_SEX(state, val) {
@@ -47,6 +49,9 @@ export default new Vuex.Store({
     SET_TOS(state, val) {
       state.readTOS = val;
     },
+    SET_PAGE(state, val) {
+      state.currentPage = val;
+    }
   },
   actions: {
   },

@@ -3,22 +3,22 @@
     app
     fixed
     grow
-    v-model="pages[currentPage]"
+    v-model="getPage"
     color="#ffffff"
     class="bar"
     dark
   >
-    <v-btn value="timeline" @click="setRoute('/timeline')">
+    <v-btn value="timeline" @click="setRoute('/timeline')" id="timelineButton">
       <span>Timeline</span>
       <i class="fas fa-chart-bar fa-2x"></i>
     </v-btn>
 
-    <v-btn value="home" @click="setRoute('/')">
+    <v-btn value="home" @click="setRoute('/')" id="homeButton">
       <span>Home</span>
       <i class="fas fa-home fa-2x"></i>
     </v-btn>
 
-    <v-btn value="settings" @click="setRoute('/settings')">
+    <v-btn value="settings" @click="setRoute('/settings')" id="settingsButton">
       <span>Settings</span>
       <i class="fas fa-cog fa-2x"></i>
     </v-btn>
@@ -26,26 +26,39 @@
 </template>
 
 <script>
-const pages = ["timeline", "home", "settings"];
-
 export default {
   name: "Footer",
 
-  props: {
-    currentPage: {
-      type: Number,
-      default: pages[1],
+  data: () => ({
+    page: 1,
+    pages: ["timeline", "home", "settings"],
+  }),
+
+  computed: {
+    getPage: {
+      get() {
+        return this.pages[this.$store.state.currentPage];
+      },
+      set(name) {
+        return name;
+      },
     },
   },
-
-  data: () => ({
-    pages,
-  }),
 };
 </script>
 
 <style scoped>
 .bar {
   background: transparent !important;
+}
+
+.theme--dark.v-btn--active:hover::before,
+.theme--dark.v-btn--active::before {
+  opacity: 0;
+}
+
+.theme--dark.v-btn--active:hover::after,
+.theme--dark.v-btn--active::after {
+  opacity: 0;
 }
 </style>

@@ -52,7 +52,7 @@ export default {
   async removeAllBAC() {
 
     let db = await this.getDB();
-    db.clear();
+    db.clear(BAC_TABLE);
   },
   async getBAC(n) {
 

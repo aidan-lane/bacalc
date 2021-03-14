@@ -8,17 +8,17 @@
     class="bar"
     dark
   >
-    <v-btn value="timeline" @click="setRoute('/timeline')" id="timelineButton">
+    <v-btn value="timeline" @click="setRoute('/timeline')" ref="timeline">
       <span>Timeline</span>
       <i class="fas fa-chart-bar fa-2x"></i>
     </v-btn>
 
-    <v-btn value="home" @click="setRoute('/')" id="homeButton">
+    <v-btn value="home" @click="setRoute('/')" ref="home">
       <span>Home</span>
       <i class="fas fa-home fa-2x"></i>
     </v-btn>
 
-    <v-btn value="settings" @click="setRoute('/settings')" id="settingsButton">
+    <v-btn value="settings" @click="setRoute('/settings')" ref="settings">
       <span>Settings</span>
       <i class="fas fa-cog fa-2x"></i>
     </v-btn>
@@ -40,7 +40,10 @@ export default {
         return this.pages[this.$store.state.currentPage];
       },
       set(name) {
-        return name;
+        this.$store.commit(
+          "SET_PAGE",
+          this.pages.findIndex((e) => e === name)
+        );
       },
     },
   },
@@ -54,11 +57,11 @@ export default {
 
 .theme--dark.v-btn--active:hover::before,
 .theme--dark.v-btn--active::before {
-  opacity: 0;
+  opacity: 0 !important;
 }
 
 .theme--dark.v-btn--active:hover::after,
 .theme--dark.v-btn--active::after {
-  opacity: 0;
+  opacity: 0 !important;
 }
 </style>

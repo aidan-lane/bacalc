@@ -77,19 +77,19 @@ export default {
     swipe(dir) {
       if (this.$route.path === "/" && dir === "left") {
         this.setRoute("/settings");
-        document.getElementById("settingsButton").focus();
+        //document.getElementById("settingsButton").focus();
         this.$store.commit("SET_PAGE", 2);
       } else if (this.$route.path === "/" && dir === "right") {
         this.setRoute("/timeline");
-        document.getElementById("timelineButton").focus();
+        //document.getElementById("timelineButton").focus();
         this.$store.commit("SET_PAGE", 0);
       } else if (this.$route.path === "/settings" && dir === "right") {
         this.setRoute("/");
-        document.getElementById("homeButton").focus();
+        //document.getElementById("homeButton").focus();
         this.$store.commit("SET_PAGE", 1);
       } else if (this.$route.path === "/timeline" && dir === "left") {
         this.setRoute("/");
-        document.getElementById("homeButton").focus();
+        //document.getElementById("homeButton").focus();
         this.$store.commit("SET_PAGE", 1);
       }
     },

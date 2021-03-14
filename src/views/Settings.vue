@@ -86,6 +86,12 @@ export default {
 
   methods: {
     reset() {
+      this.$store.commit("SET_BAC", {
+        bac: 0.0,
+        date: Date.now(),
+        isDrink: false,
+        addToDB: false,
+      });
       db.removeAllBAC();
       this.resetConfirm = false;
     },
